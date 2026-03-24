@@ -71,50 +71,26 @@ Download OVT-B from one of the following links:
 
 Extract the files and organize them under `data/ovtb/` (see [Directory Structure](#directory-structure) below).
 
-### 2. Install Dependencies
+### 2. Install
 
-We recommend [uv](https://docs.astral.sh/uv/) for fast, reproducible dependency management.
+Requires [uv](https://docs.astral.sh/uv/).
 
 ```bash
-# Create a virtual environment with Python 3.7+
-uv venv --python 3.7
-source .venv/bin/activate
+uv venv --python 3.7 && source .venv/bin/activate
 
-# Install PyTorch first (must match your CUDA version)
+# PyTorch (adjust cu113 to match your CUDA version)
 uv pip install torch==1.10.0+cu113 torchvision==0.11.0+cu113 \
     --index-url https://download.pytorch.org/whl/cu113
 
-# Install mmcv and mmdetection (must match torch + CUDA)
+# OpenMMLab
 uv pip install mmcv-full==1.4.4 \
     --find-links https://download.openmmlab.com/mmcv/dist/cu113/torch1.10.0/index.html
 uv pip install mmdet==2.23.0
 
-# Install CLIP
+# CLIP + project + TETA evaluation metric
 uv pip install git+https://github.com/openai/CLIP.git
-
-# Install the project and all dependencies
-uv pip install -e .
-
-# Install TETA evaluation metric
 uv pip install -e ".[eval]"
 ```
-
-<details>
-<summary>Alternative: install with pip (no uv)</summary>
-
-```bash
-conda create -n ovtb python=3.7 -y && conda activate ovtb
-pip install torch==1.10.0+cu113 torchvision==0.11.0+cu113 -f https://download.pytorch.org/whl/torch_stable.html
-pip install mmcv-full==1.4.4 -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.10.0/index.html
-pip install mmdet==2.23.0
-pip install git+https://github.com/openai/CLIP.git
-pip install -r requirements.txt && pip install -e .
-pip install git+https://github.com/SysCV/tet.git/#subdirectory=teta
-```
-
-</details>
-
-For more details on TETA, see [TETA repository](https://github.com/SysCV/tet/tree/main/teta).
 
 ### 3. Prepare the Data
 
