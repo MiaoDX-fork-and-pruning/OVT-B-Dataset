@@ -73,37 +73,50 @@ Extract the files and organize them under `data/ovtb/` (see [Directory Structure
 
 ### 2. Install Dependencies
 
+We recommend [uv](https://docs.astral.sh/uv/) for fast, reproducible dependency management.
+
 ```bash
-# Create environment (Python 3.7, PyTorch 1.10, CUDA 11.3 recommended)
-conda create -n ovtb python=3.7 -y
-conda activate ovtb
+# Create a virtual environment with Python 3.7+
+uv venv --python 3.7
+source .venv/bin/activate
 
-# Install PyTorch
-pip install torch==1.10.0+cu113 torchvision==0.11.0+cu113 -f https://download.pytorch.org/whl/torch_stable.html
+# Install PyTorch first (must match your CUDA version)
+uv pip install torch==1.10.0+cu113 torchvision==0.11.0+cu113 \
+    --index-url https://download.pytorch.org/whl/cu113
 
-# Install mmcv and mmdetection
-pip install mmcv-full==1.4.4 -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.10.0/index.html
-pip install mmdet==2.23.0
+# Install mmcv and mmdetection (must match torch + CUDA)
+uv pip install mmcv-full==1.4.4 \
+    --find-links https://download.openmmlab.com/mmcv/dist/cu113/torch1.10.0/index.html
+uv pip install mmdet==2.23.0
 
 # Install CLIP
-pip install git+https://github.com/openai/CLIP.git
+uv pip install git+https://github.com/openai/CLIP.git
 
-# Install project dependencies
-pip install -r requirements.txt
+# Install the project and all dependencies
+uv pip install -e .
 
-# Install the package
-pip install -e .
+# Install TETA evaluation metric
+uv pip install -e ".[eval]"
 ```
 
-### 3. Install the TETA Evaluation Metric
+<details>
+<summary>Alternative: install with pip (no uv)</summary>
 
 ```bash
-python -m pip install git+https://github.com/SysCV/tet.git/#subdirectory=teta
+conda create -n ovtb python=3.7 -y && conda activate ovtb
+pip install torch==1.10.0+cu113 torchvision==0.11.0+cu113 -f https://download.pytorch.org/whl/torch_stable.html
+pip install mmcv-full==1.4.4 -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.10.0/index.html
+pip install mmdet==2.23.0
+pip install git+https://github.com/openai/CLIP.git
+pip install -r requirements.txt && pip install -e .
+pip install git+https://github.com/SysCV/tet.git/#subdirectory=teta
 ```
 
-For more details, see [TETA repository](https://github.com/SysCV/tet/tree/main/teta).
+</details>
 
-### 4. Prepare the Data
+For more details on TETA, see [TETA repository](https://github.com/SysCV/tet/tree/main/teta).
+
+### 3. Prepare the Data
 
 ```
 data/ovtb/
@@ -124,12 +137,12 @@ data/ovtb/
 
 Copy the `CLASS`, `base_id`, and `novel_id` from `ovtb_classname.py` and add them to the `class_name.py` file under the `roi_head` folder of your open-vocabulary detector.
 
-### 5. Download Pretrained Models
+### 4. Download Pretrained Models
 
 - [OVTrack model](https://drive.google.com/file/d/1vDAFRmuNMCwhKtW7KHONpzkooLysU8nX/view?usp=sharing) -> `saved_models/ovtrack_detpro_prompt.pth`
 - [DetPro prompt](https://drive.google.com/file/d/1N7ht5b44R2LgExhk0smWLydpTO-RuwMe/view?usp=sharing) -> `saved_models/pretrained_models/detpro_prompt.pt`
 
-### 6. Run Evaluation on OVT-B
+### 5. Run Evaluation on OVT-B
 
 ```bash
 # Multi-GPU evaluation (8 GPUs)

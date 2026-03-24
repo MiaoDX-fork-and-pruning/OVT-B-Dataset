@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# uv
+.python-version
+uv.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project artifacts
+saved_models/
+results/
+data/
+*.log
+*.pth
+*.pt
+*.h5
+*.hdf5
+*.pkl
+
+# Jupyter
+.ipynb_checkpoints/

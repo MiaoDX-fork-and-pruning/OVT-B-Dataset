@@ -1,0 +1,76 @@
+[project]
+name = "ovtrack"
+version = "0.1.0"
+description = "OVT-B: A New Large-Scale Benchmark for Open-Vocabulary Multi-Object Tracking"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.7"
+authors = [
+    { name = "Haiji Liang" },
+    { name = "Ruize Han" },
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+dependencies = [
+    "einops",
+    "ftfy",
+    "h5py",
+    "lvis",
+    "motmetrics",
+    "numpy>=1.21,<2",
+    "pycocotools",
+    "regex",
+    "seaborn",
+    "timm",
+    "tqdm",
+]
+
+[project.optional-dependencies]
+# Core framework deps — install manually first (need specific CUDA/torch version)
+# See README.md Quick Start for the full install sequence:
+#   torch==1.10.0  mmcv-full==1.4.4  mmdetection==2.23.0
+train = [
+    "diffusers==0.4.0",
+]
+eval = [
+    "teta @ git+https://github.com/SysCV/tet.git#subdirectory=teta",
+]
+dev = [
+    "pytest",
+    "xdoctest",
+    "isort",
+    "yapf",
+]
+
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[tool.setuptools.packages.find]
+include = ["ovtrack*"]
+exclude = ["configs*", "tools*", "demo*"]
+
+[tool.setuptools.package-data]
+"ovtrack.ops" = ["*/*.so"]
+
+[tool.isort]
+line_length = 79
+multi_line_output = 0
+known_standard_library = ["setuptools"]
+known_first_party = ["ovtrack"]
+known_third_party = ["cv2", "mmcv", "mmdet", "motmetrics", "numpy", "pandas", "pycocotools", "torch", "torchvision", "tqdm"]
+no_lines_before = ["STDLIB", "LOCALFOLDER"]
+default_section = "THIRDPARTY"
+
+[tool.yapf]
+based_on_style = "pep8"
+blank_line_before_nested_class_or_def = true
+split_before_expression_after_opening_paren = true
